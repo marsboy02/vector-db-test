@@ -26,3 +26,9 @@ $ pip3 install -r requirements.txt
 ```bash
 # 패키지 의존성 저장
 $ pip3 freeze > requirements.txt
+```
+
+```bash
+# 패키지 의존성 초기화 !!!
+$ pip3 uninstall -r requirements.txt -y
+```

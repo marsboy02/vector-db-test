@@ -3,17 +3,20 @@ import pyarrow as pa
 from flask import Flask, jsonify
 from transformers import TFAutoModel, AutoTokenizer
 
-app = Flask(__name__)
-
 # 모델과 토크나이저 초기화
 tokenizer = AutoTokenizer.from_pretrained("klue/roberta-base")
 model = TFAutoModel.from_pretrained("klue/roberta-base")
+print('model is ready!')
 
 # lanceDB init
 uri = "db/lancedb"
 db = lancedb.connect(uri)
 schema = pa.schema([pa.field("vector", pa.list_(pa.float32(), list_size=2))])
 tbl = db.create_table("vector", schema=schema)
+print("vector db is ready!")
+
+app = Flask(__name__)
+print('server is ready!')
 
 
 def insert_embedding(vector, item):
@@ -44,4 +47,4 @@ def item_embedding(item_name):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

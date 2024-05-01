@@ -11,8 +11,17 @@ print('model is ready!')
 # lanceDB init
 uri = "db/lancedb"
 db = lancedb.connect(uri)
-schema = pa.schema([pa.field("vector", pa.list_(pa.float32(), list_size=2))])
-tbl = db.create_table("vector", schema=schema)
+
+dim = 768
+schema = pa.schema(
+    [
+        pa.field("vector", pa.list_(pa.float32(), dim)),
+        pa.field("item", pa.string())
+    ]
+)
+
+tbl = db.create_table("vector", schema=schema, exist_ok=True)
+tbl.create_fts_index("item", replace=True)
 print("vector db is ready!")
 
 app = Flask(__name__)
@@ -20,9 +29,8 @@ print('server is ready!')
 
 
 def insert_embedding(vector, item):
-    data = [
-        {"vector": vector, "item": item}
-    ]
+    data = {"vector": vector[0], "item": item}
+    print(data)
     tbl.add(data)
 
 
@@ -30,7 +38,6 @@ def embedding(text):
     inputs = tokenizer(text, return_tensors="tf", padding=True, truncation=True, max_length=512)
     outputs = model(inputs)
     embeddings = outputs.last_hidden_state[:, 0, :]
-    print(embeddings)
     return embeddings.numpy().tolist()
 
 
@@ -44,6 +51,17 @@ def item_embedding(item_name):
     embeddings = embedding(item_name)
     insert_embedding(embeddings, item_name)
     return jsonify({"item_name": item_name, "embedding": embeddings}), 200
+
+
+@app.route('/item', methods=['GET'])
+def read_item_all():
+    data = tbl.search([100, 100]).limit(2).to_pandas()
+    return data
+
+
+@app.route('/item/<item_name>', methods=['GET'])
+def search_text(item_name):
+    return tbl.search(item_name).limit(10).select(["item"]).to_list()
 
 
 if __name__ == '__main__':

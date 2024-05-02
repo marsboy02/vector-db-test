@@ -15,7 +15,7 @@ db = lancedb.connect(uri)
 dim = 768
 schema = pa.schema(
     [
-        pa.field("vector", pa.list_(pa.float32(), dim)),
+        pa.field("vector", pa.list_(pa.float32(), list_size=dim)),
         pa.field("item", pa.string())
     ]
 )
@@ -29,8 +29,7 @@ print('server is ready!')
 
 
 def insert_embedding(vector, item):
-    data = {"vector": vector[0], "item": item}
-    print(data)
+    data = [{"vector": vector[0], "item": item}]
     tbl.add(data)
 
 
@@ -55,7 +54,7 @@ def item_embedding(item_name):
 
 @app.route('/item', methods=['GET'])
 def read_item_all():
-    data = tbl.search([100, 100]).limit(2).to_pandas()
+    data = tbl.search([350000, 350000]).limit(dim).to_pandas()
     return data
 
 

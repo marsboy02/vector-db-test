@@ -3,7 +3,48 @@
     "docstore_compression": "lz4",
     "docstore_blocksize": 16384
   },
-  "segments": [],
+  "segments": [
+    {
+      "segment_id": "78b38524-252a-421c-a65f-99acc9c951a0",
+      "max_doc": 3,
+      "deletes": null
+    },
+    {
+      "segment_id": "af255ed6-e0c5-4a5b-bd7c-ed3d6b1a9b81",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "95559902-032c-4ad6-b110-5b6d0e9e899a",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "2fd51d64-7d62-4f76-bd05-c1134a37d21d",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "cc4898c0-9069-4da2-adb9-40b189e4393a",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "70e4f28b-6af4-4b99-888d-b62df4c2ac0d",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "8dff741e-bda0-478f-b34a-e3d2fd4b9a53",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "8281dd63-a47f-43dd-84e8-292a6d9b050b",
+      "max_doc": 1,
+      "deletes": null
+    }
+  ],
   "schema": [
     {
       "name": "doc_id",
@@ -29,5 +70,5 @@
       }
     }
   ],
-  "opstamp": 0
+  "opstamp": 18
 }

@@ -82,7 +82,7 @@ def default_item_embedding():
 
 @app.route('/item', methods=['GET'])
 def read_item_all():
-    return tbl.search([500000, 500000]).limit(dim).to_pandas()
+    return tbl.search([5000000, 5000000]).limit(dim).to_pandas()
 
 
 @app.route('/item/<item_name>', methods=['GET'])

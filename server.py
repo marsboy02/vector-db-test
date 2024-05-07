@@ -2,26 +2,27 @@ import lancedb
 import pyarrow as pa
 from flask import Flask, jsonify
 from transformers import TFAutoModel, AutoTokenizer
+from flask_swagger_ui import get_swaggerui_blueprint
 
 sample = [
-        "완전 맛있는 햄버거",
-        "패티가 맛있는 햄버거",
-        "감자튀김과 함께 먹으면 맛있는 햄버거",
-        "패스트푸드점에서 가장 유명한 햄버거",
-        "검은색 콜라",
-        "칼로리가 낮은 콜라",
-        "치킨과 함께 먹으면 굉장히 맛있는 콜라",
-        "패스트푸드와 먹기에는 별로인 콜라",
-        "바삭바삭한 치킨",
-        "축구를 보면서 먹으면 맛있는 치킨",
-        "다이어트 하는 사람을 위한 구운 치킨",
-        "콜라와 함께 먹기 좋은 양념 치킨",
-        "달달한 고구마 피자",
-        "느끼한 치즈 피자",
-        "평범하게 먹기 좋은 콤비네이션 피자",
-        "치킨과 먹으면 맛있는 파인애플 피자",
-        "콜라와 함께 먹으면 맛있는 피자"
-    ]
+    "완전 맛있는 햄버거",
+    "패티가 맛있는 햄버거",
+    "감자튀김과 함께 먹으면 맛있는 햄버거",
+    "패스트푸드점에서 가장 유명한 햄버거",
+    "검은색 콜라",
+    "칼로리가 낮은 콜라",
+    "치킨과 함께 먹으면 굉장히 맛있는 콜라",
+    "패스트푸드와 먹기에는 별로인 콜라",
+    "바삭바삭한 치킨",
+    "축구를 보면서 먹으면 맛있는 치킨",
+    "다이어트 하는 사람을 위한 구운 치킨",
+    "콜라와 함께 먹기 좋은 양념 치킨",
+    "달달한 고구마 피자",
+    "느끼한 치즈 피자",
+    "평범하게 먹기 좋은 콤비네이션 피자",
+    "치킨과 먹으면 맛있는 파인애플 피자",
+    "콜라와 함께 먹으면 맛있는 피자"
+]
 
 # 모델과 토크나이저 초기화
 tokenizer = AutoTokenizer.from_pretrained("klue/roberta-base")
@@ -76,7 +77,7 @@ def item_embedding(item_name):
 def default_item_embedding():
     for item in sample:
         item_embedding(item)
-    return jsonify({"message": "default data created"}), 200
+    return jsonify({"message": "default data created"}), 201
 
 
 @app.route('/item', methods=['GET'])
@@ -88,6 +89,18 @@ def read_item_all():
 def search_text(item_name):
     return tbl.search(item_name).limit(10).select(["item"]).to_list()
 
+
+SWAGGER_URL = "/swagger"
+API_URL = "/static/swagger.json"
+
+swagger_ui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': 'Access API'
+    }
+)
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 if __name__ == '__main__':
     app.run(debug=False)

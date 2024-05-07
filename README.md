@@ -1,5 +1,6 @@
 # vector-db-test
-vector db를 테스트하는 프로젝트입니다.
+- vector db를 테스트하는 프로젝트입니다.
+- **swagger-ui** : http://localhost:5000/swagger
 
 ## venv 관련
 
